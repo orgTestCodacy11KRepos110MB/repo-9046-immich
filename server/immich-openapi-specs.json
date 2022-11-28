@@ -1273,6 +1273,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "details",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -3305,6 +3313,9 @@
           "createdAt": {
             "type": "string"
           },
+          "modifiedAt": {
+            "type": "string"
+          },
           "albumThumbnailAssetId": {
             "type": "string",
             "nullable": true
@@ -3331,6 +3342,7 @@
           "ownerId",
           "albumName",
           "createdAt",
+          "modifiedAt",
           "albumThumbnailAssetId",
           "shared",
           "sharedUsers",

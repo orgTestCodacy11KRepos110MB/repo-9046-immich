@@ -11,8 +11,13 @@ class ApiService {
   late ServerInfoApi serverInfoApi;
   late DeviceInfoApi deviceInfoApi;
 
+  String? _authToken;
+
   setEndpoint(String endpoint) {
     _apiClient = ApiClient(basePath: endpoint);
+    if (_authToken != null) {
+      setAccessToken(_authToken!);
+    }
     userApi = UserApi(_apiClient);
     authenticationApi = AuthenticationApi(_apiClient);
     oAuthApi = OAuthApi(_apiClient);
@@ -23,6 +28,9 @@ class ApiService {
   }
 
   setAccessToken(String accessToken) {
+    _authToken = accessToken;
     _apiClient.addDefaultHeader('Authorization', 'Bearer $accessToken');
   }
+
+  ApiClient get apiClient => _apiClient;
 }

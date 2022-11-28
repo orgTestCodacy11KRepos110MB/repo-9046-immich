@@ -102,7 +102,7 @@ class ThumbnailImage extends HookConsumerWidget {
                 bottom: 5,
                 child: Icon(
                   asset.isRemote
-                      ? (deviceId == asset.deviceId
+                      ? (asset.isLocal
                           ? Icons.cloud_done_outlined
                           : Icons.cloud_outlined)
                       : Icons.cloud_off_outlined,

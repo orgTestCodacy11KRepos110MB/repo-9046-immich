@@ -16,9 +16,14 @@ import 'package:immich_mobile/modules/login/models/hive_saved_login_info.model.d
 import 'package:immich_mobile/modules/login/providers/authentication.provider.dart';
 import 'package:immich_mobile/routing/router.dart';
 import 'package:immich_mobile/routing/tab_navigation_observer.dart';
+import 'package:immich_mobile/shared/models/album.dart';
+import 'package:immich_mobile/shared/models/asset.dart';
 import 'package:immich_mobile/shared/models/immich_logger_message.model.dart';
+import 'package:immich_mobile/shared/models/value.dart';
+import 'package:immich_mobile/shared/models/user.dart';
 import 'package:immich_mobile/shared/providers/app_state.provider.dart';
 import 'package:immich_mobile/shared/providers/asset.provider.dart';
+import 'package:immich_mobile/shared/providers/db.provider.dart';
 import 'package:immich_mobile/shared/providers/release_info.provider.dart';
 import 'package:immich_mobile/shared/providers/server_info.provider.dart';
 import 'package:immich_mobile/shared/providers/websocket.provider.dart';
@@ -26,6 +31,8 @@ import 'package:immich_mobile/shared/services/immich_logger.service.dart';
 import 'package:immich_mobile/shared/views/immich_loading_overlay.dart';
 import 'package:immich_mobile/shared/views/version_announcement_overlay.dart';
 import 'package:immich_mobile/utils/immich_app_theme.dart';
+import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart';
 import 'constants/hive_box.dart';
 
 void main() async {
@@ -34,7 +41,11 @@ void main() async {
   Hive.registerAdapter(HiveBackupAlbumsAdapter());
   Hive.registerAdapter(HiveDuplicatedAssetsAdapter());
   Hive.registerAdapter(ImmichLoggerMessageAdapter());
-
+  final dir = await getApplicationDocumentsDirectory();
+  final db = await Isar.open(
+    [UserSchema, AssetSchema, AlbumSchema, ValueSchema],
+    directory: dir.path,
+  );
   await Future.wait([
     Hive.openBox<ImmichLoggerMessage>(immichLoggerBox),
     Hive.openBox(userInfoBox),
@@ -71,7 +82,10 @@ void main() async {
       path: translationsPath,
       useFallbackTranslations: true,
       fallbackLocale: locales.first,
-      child: const ProviderScope(child: ImmichApp()),
+      child: ProviderScope(
+        overrides: [dbProvider.overrideWithValue(db)],
+        child: const ImmichApp(),
+      ),
     ),
   );
 }

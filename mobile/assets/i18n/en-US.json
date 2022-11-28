@@ -112,6 +112,7 @@
   "home_page_add_to_album_success": "Added {added} assets to album {album}.",
   "library_page_albums": "Albums",
   "library_page_new_album": "New album",
+  "library_page_device_albums": "Device Albums",
   "login_form_button_text": "Login",
   "login_form_email_hint": "youremail@email.com",
   "login_form_endpoint_hint": "http://your-server-ip:port/api",

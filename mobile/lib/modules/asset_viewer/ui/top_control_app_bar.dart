@@ -42,7 +42,7 @@ class TopControlAppBar extends HookConsumerWidget with PreferredSizeWidget {
         ),
       ),
       actions: [
-        if (asset.remote?.livePhotoVideoId != null)
+        if (asset.livePhotoVideoId != null)
           IconButton(
             iconSize: iconSize,
             splashRadius: iconSize,

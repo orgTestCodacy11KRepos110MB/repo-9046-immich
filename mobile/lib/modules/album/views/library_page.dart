@@ -22,7 +22,7 @@ class LibraryPage extends HookConsumerWidget {
       [],
     );
 
-    Widget _buildAppBar() {
+    Widget buildAppBar() {
       return const SliverAppBar(
         centerTitle: true,
         floating: true,
@@ -40,7 +40,7 @@ class LibraryPage extends HookConsumerWidget {
       );
     }
 
-    Widget _buildCreateAlbumButton() {
+    Widget buildCreateAlbumButton() {
       return GestureDetector(
         onTap: () {
           AutoRouter.of(context).push(CreateAlbumRoute(isSharedAlbum: false));
@@ -83,7 +83,7 @@ class LibraryPage extends HookConsumerWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          _buildAppBar(),
+          buildAppBar(),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(12.0),
@@ -99,8 +99,31 @@ class LibraryPage extends HookConsumerWidget {
               child: Wrap(
                 spacing: 12,
                 children: [
-                  _buildCreateAlbumButton(),
-                  for (var album in albums)
+                  buildCreateAlbumButton(),
+                  for (final album in albums.where((a) => !a.isLocal))
+                    AlbumThumbnailCard(
+                      album: album,
+                    ),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: const Text(
+                'library_page_device_albums',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ).tr(),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(left: 12.0, right: 12, bottom: 50),
+            sliver: SliverToBoxAdapter(
+              child: Wrap(
+                spacing: 12,
+                children: [
+                  for (final album in albums.where((a) => a.isLocal))
                     AlbumThumbnailCard(
                       album: album,
                     ),

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immich_mobile/shared/models/asset.dart';
-import 'package:openapi/api.dart';
-import 'package:path/path.dart' as p;
 import 'package:latlong2/latlong.dart';
 import 'package:immich_mobile/utils/bytes_units.dart';
 
@@ -65,7 +63,7 @@ class ExifBottomSheet extends ConsumerWidget {
       );
     }
 
-    ExifResponseDto? exifInfo = assetDetail.remote?.exifInfo;
+    ExifInfo? exifInfo = assetDetail.exifInfo;
 
     buildLocationText() {
       return Text(
@@ -158,12 +156,12 @@ class ExifBottomSheet extends ConsumerWidget {
                     iconColor: Colors.grey[300],
                     leading: const Icon(Icons.image),
                     title: Text(
-                      "${exifInfo.imageName!}${p.extension(assetDetail.remote!.originalPath)}",
+                      "${assetDetail.name}${assetDetail.originalExtension}",
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: exifInfo.exifImageHeight != null
+                    subtitle: exifInfo.fileSize != null
                         ? Text(
-                            "${exifInfo.exifImageHeight} x ${exifInfo.exifImageWidth}  ${formatBytes(exifInfo.fileSizeInByte!)} ",
+                            "${assetDetail.height} x ${assetDetail.width}  ${formatBytes(exifInfo.fileSize!)} ",
                           )
                         : null,
                   ),

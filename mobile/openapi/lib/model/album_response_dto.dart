@@ -18,6 +18,7 @@ class AlbumResponseDto {
     required this.ownerId,
     required this.albumName,
     required this.createdAt,
+    required this.modifiedAt,
     required this.albumThumbnailAssetId,
     required this.shared,
     this.sharedUsers = const [],
@@ -34,6 +35,8 @@ class AlbumResponseDto {
 
   String createdAt;
 
+  String modifiedAt;
+
   String? albumThumbnailAssetId;
 
   bool shared;
@@ -49,6 +52,7 @@ class AlbumResponseDto {
      other.ownerId == ownerId &&
      other.albumName == albumName &&
      other.createdAt == createdAt &&
+     other.modifiedAt == modifiedAt &&
      other.albumThumbnailAssetId == albumThumbnailAssetId &&
      other.shared == shared &&
      other.sharedUsers == sharedUsers &&
@@ -62,13 +66,14 @@ class AlbumResponseDto {
     (ownerId.hashCode) +
     (albumName.hashCode) +
     (createdAt.hashCode) +
+    (modifiedAt.hashCode) +
     (albumThumbnailAssetId == null ? 0 : albumThumbnailAssetId!.hashCode) +
     (shared.hashCode) +
     (sharedUsers.hashCode) +
     (assets.hashCode);
 
   @override
-  String toString() => 'AlbumResponseDto[assetCount=$assetCount, id=$id, ownerId=$ownerId, albumName=$albumName, createdAt=$createdAt, albumThumbnailAssetId=$albumThumbnailAssetId, shared=$shared, sharedUsers=$sharedUsers, assets=$assets]';
+  String toString() => 'AlbumResponseDto[assetCount=$assetCount, id=$id, ownerId=$ownerId, albumName=$albumName, createdAt=$createdAt, modifiedAt=$modifiedAt, albumThumbnailAssetId=$albumThumbnailAssetId, shared=$shared, sharedUsers=$sharedUsers, assets=$assets]';
 
   Map<String, dynamic> toJson() {
     final _json = <String, dynamic>{};
@@ -77,6 +82,7 @@ class AlbumResponseDto {
       _json[r'ownerId'] = ownerId;
       _json[r'albumName'] = albumName;
       _json[r'createdAt'] = createdAt;
+      _json[r'modifiedAt'] = modifiedAt;
     if (albumThumbnailAssetId != null) {
       _json[r'albumThumbnailAssetId'] = albumThumbnailAssetId;
     } else {
@@ -112,6 +118,7 @@ class AlbumResponseDto {
         ownerId: mapValueOfType<String>(json, r'ownerId')!,
         albumName: mapValueOfType<String>(json, r'albumName')!,
         createdAt: mapValueOfType<String>(json, r'createdAt')!,
+        modifiedAt: mapValueOfType<String>(json, r'modifiedAt')!,
         albumThumbnailAssetId: mapValueOfType<String>(json, r'albumThumbnailAssetId'),
         shared: mapValueOfType<bool>(json, r'shared')!,
         sharedUsers: UserResponseDto.listFromJson(json[r'sharedUsers'])!,
@@ -170,6 +177,7 @@ class AlbumResponseDto {
     'ownerId',
     'albumName',
     'createdAt',
+    'modifiedAt',
     'albumThumbnailAssetId',
     'shared',
     'sharedUsers',

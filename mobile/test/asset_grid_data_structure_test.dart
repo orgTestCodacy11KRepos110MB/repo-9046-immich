@@ -93,10 +93,10 @@ void main() {
 
       expect(renderList.length, 7);
       expect(renderList[6].assetRow!.assets.length, 3);
-      expect(renderList[0].assetRow!.assets[0].id, '0');
-      expect(renderList[1].assetRow!.assets[1].id, '4');
-      expect(renderList[3].assetRow!.assets[2].id, '11');
-      expect(renderList[6].assetRow!.assets[2].id, '20');
+      expect(renderList[0].assetRow!.assets[0].remoteId, '0');
+      expect(renderList[1].assetRow!.assets[1].remoteId, '4');
+      expect(renderList[3].assetRow!.assets[2].remoteId, '11');
+      expect(renderList[6].assetRow!.assets[2].remoteId, '20');
     });
   });
 

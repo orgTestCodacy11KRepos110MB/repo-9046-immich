@@ -1,20 +1,17 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:immich_mobile/constants/hive_box.dart';
 import 'package:immich_mobile/modules/home/ui/delete_diaglog.dart';
-import 'package:immich_mobile/utils/image_url_builder.dart';
-import 'package:openapi/api.dart';
+import 'package:immich_mobile/shared/models/album.dart';
+import 'package:immich_mobile/shared/ui/immich_image.dart';
 
 class ControlBottomAppBar extends ConsumerWidget {
   final Function onShare;
   final Function onDelete;
-  final Function(AlbumResponseDto album) onAddToAlbum;
+  final Function(Album album) onAddToAlbum;
   final void Function() onCreateNewAlbum;
 
-  final List<AlbumResponseDto> albums;
+  final List<Album> albums;
 
   const ControlBottomAppBar({
     Key? key,
@@ -56,9 +53,7 @@ class ControlBottomAppBar extends ConsumerWidget {
     }
 
     Widget renderAlbums() {
-      Widget renderAlbum(AlbumResponseDto album) {
-        final box = Hive.box(userInfoBox);
-
+      Widget renderAlbum(Album album) {
         return Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: GestureDetector(
@@ -71,21 +66,24 @@ class ControlBottomAppBar extends ConsumerWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: CachedNetworkImage(
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                      imageUrl: getAlbumThumbnailUrl(album),
-                      httpHeaders: {
-                        "Authorization": "Bearer ${box.get(accessTokenKey)}"
-                      },
-                      cacheKey: getAlbumThumbNailCacheKey(album),
-                    ),
+                    child: album.albumThumbnailAsset.value != null
+                        ? ImmichImage(
+                            album.albumThumbnailAsset.value!,
+                            width: 100,
+                            height: 100,
+                          )
+                        : const SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: Center(
+                              child: Icon(Icons.no_photography),
+                            ),
+                          ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
                     child: Text(
-                      album.albumName,
+                      album.name,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12.0,

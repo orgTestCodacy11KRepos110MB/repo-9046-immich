@@ -17,6 +17,7 @@ import 'package:immich_mobile/modules/home/ui/profile_drawer/profile_drawer.dart
 import 'package:immich_mobile/modules/settings/providers/app_settings.provider.dart';
 import 'package:immich_mobile/modules/settings/services/app_settings.service.dart';
 import 'package:immich_mobile/routing/router.dart';
+import 'package:immich_mobile/shared/models/album.dart';
 import 'package:immich_mobile/shared/models/asset.dart';
 import 'package:immich_mobile/shared/providers/asset.provider.dart';
 import 'package:immich_mobile/shared/providers/server_info.provider.dart';
@@ -24,7 +25,6 @@ import 'package:immich_mobile/shared/providers/websocket.provider.dart';
 import 'package:immich_mobile/shared/services/share.service.dart';
 import 'package:immich_mobile/shared/ui/immich_loading_indicator.dart';
 import 'package:immich_mobile/shared/ui/immich_toast.dart';
-import 'package:openapi/api.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -97,14 +97,14 @@ class HomePage extends HookConsumerWidget {
         return assets;
       }
 
-      void onAddToAlbum(AlbumResponseDto album) async {
+      void onAddToAlbum(Album album) async {
         final Iterable<Asset> assets = remoteOnlySelection();
         if (assets.isEmpty) {
           return;
         }
         final result = await albumService.addAdditionalAssetToAlbum(
           assets,
-          album.id,
+          album,
         );
 
         if (result != null) {
@@ -113,7 +113,7 @@ class HomePage extends HookConsumerWidget {
               context: context,
               msg: "home_page_add_to_album_conflicts".tr(
                 namedArgs: {
-                  "album": album.albumName,
+                  "album": album.name,
                   "added": result.successfullyAdded.toString(),
                   "failed": result.alreadyInAlbum.length.toString()
                 },
@@ -124,7 +124,7 @@ class HomePage extends HookConsumerWidget {
               context: context,
               msg: "home_page_add_to_album_success".tr(
                 namedArgs: {
-                  "album": album.albumName,
+                  "album": album.name,
                   "added": result.successfullyAdded.toString(),
                 },
               ),
@@ -229,7 +229,7 @@ class HomePage extends HookConsumerWidget {
                 onShare: onShareAssets,
                 onDelete: onDelete,
                 onAddToAlbum: onAddToAlbum,
-                albums: albums,
+                albums: albums.where((e) => e.isRemote).toList(growable: false),
                 onCreateNewAlbum: onCreateNewAlbum,
               ),
           ],
